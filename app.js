@@ -3,9 +3,6 @@ const app = express();
 const PORT = 5000;
 const mongoose = require('mongoose');
 const { mongoURI } = require('./keys');
-require('./models/user');
-app.use(express.json());
-app.use(require('./routes/auth'));
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
@@ -19,6 +16,13 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err) => {
   console.log('Error connecting!!', err);
 });
+
+app.use(express.json());
+require('./models/user');
+require('./models/post');
+
+app.use(require('./routes/auth'));
+app.use(require('./routes/post'));
 
 app.get('/', (req, res) => {
   res.send('Hello World');
